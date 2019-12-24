@@ -1,0 +1,18 @@
+# Map path to auth service
+zuul:
+  routes:
+    authentication-service:
+      path: /auth/**
+      service-id: authentication-service
+      # By default, all requests to authentication service for example will start with: "/auth/"
+      # What will be sent to the authentication service is what comes after the path defined,
+      # So, if request is "/auth/token", auth service will get "/token".
+      # We need to pass the "/auth/" in the path to auth service. So, set strip-prefix to false
+      strip-prefix: false
+      # Exclude authorization from sensitive headers
+      sensitive-headers:
+    strategy-service:
+      path: /strategies/**
+      service-id: strategy-service
+      strip-prefix: false
+      sensitive-headers:

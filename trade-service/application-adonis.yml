@@ -1,0 +1,17 @@
+management:
+  endpoints:
+    web:
+      exposure:
+        include: info, health, shutdown
+  endpoint:
+    shutdown:
+      enabled: true
+fix:
+  session:
+    demo-bridge:
+      config-file: fix/OneZeroClientConfiguration-adonis.cfg
+      session-status-interval: 30000
+zabbix:
+ projects:
+  project-host: tradeServiceTestAdonis
+

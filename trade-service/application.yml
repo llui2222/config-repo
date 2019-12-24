@@ -1,0 +1,106 @@
+spring:
+  security:
+    user:
+      name: user
+      password: password
+  jackson:
+    default-property-inclusion: non_null
+  datasource:
+    url: jdbc:mysql://localhost:3306/trade
+    username: trade_user
+    password: trade_user
+    driver-class-name: org.mariadb.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+  session:
+    store-type: jdbc
+    jdbc:
+      initialize-schema: always
+  quartz:
+    job-store-type: jdbc
+    properties:
+      org.quartz.scheduler.instanceName: ClusteredScheduler
+      org.quartz.scheduler.instanceId: AUTO
+      org.quartz.threadPool.class: org.quartz.simpl.SimpleThreadPool
+      org.quartz.threadPool.threadCount: 10
+      org.quartz.threadPool.threadPriority: 5
+      org.quartz.jobStore.misfireThreshold: 60000
+      org.quartz.jobStore.class: org.quartz.impl.jdbcjobstore.JobStoreTX
+      org.quartz.jobStore.driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate
+      org.quartz.jobStore.useProperties: false
+      org.quartz.jobStore.isClustered: true
+      org.quartz.jobStore.clusterCheckinInterval: 20000
+
+bridge:
+  datasource:
+      - url: jdbc:postgresql://demo_b.trading-point.com:5432/Hub
+        username: oppo_ro
+        driver-class-name: org.postgresql.Driver
+        password: f1Gzkhva4aehGSu2emHj
+
+fix:
+  store-path: fix/store
+  dictionary-file: fix/OneZeroQuickFixDictionary.xml
+  certificate-file: fix/x509cert.jks
+  session:
+    demo-bridge:
+      fixSessionCredentialsIds:
+        - adonis
+        - aleksei
+        - chris
+        - vik
+zabbix:
+ network:
+  host: zabbix.xm.com
+  port: 10051
+ projects:
+  project-host: tradeServicePreProduction
+  items:
+
+   heartbeat-key: tpam.tradeservice.heartbeats
+   fatal-issue-key: tpam.tradeservice.issues.fatal
+   fix-connection-key: tpam.tradeservice.fix.isconnected
+   warning-event-key: tpam.tradeservice.issues.warning
+   unresolved-trades-key: tpam.tradeservice.issues.unresolvedtrades
+   unsuccessful-trades-key: tpam.tradeservice.trades.unsuccessful
+   discovery-key: tpam.tradeservice.discovery
+
+logging:
+  level:
+    com.xm: DEBUG
+
+service:
+  jobs:
+    unsuccessful-trades-job:
+      repeat-interval: 30000
+    trade-status-resolver-job:
+      repeat-interval: 10000
+    heartbeat-job:
+      repeat-interval: 30000
+  messaging:
+    trade-updates-destination: /topic/position-updates
+  trade-status-resolver:
+    resolve-on-startup: true
+    trade-expiration-period-in-seconds: 3
+  sql:
+      queries:
+        getBridgeTrade: SELECT
+                          taker_order_id            AS tradeId,
+                          is_order_finalized        AS isFinalized,
+                          SUM(maker_filled_volume)  AS filledVolume,
+                          AVG(maker_executed_price) AS averagePrice,
+                          order_result              AS orderStatus,
+                          order_reject_reason       AS rejectionReason
+                        FROM trades_view
+                        WHERE taker_order_id = ?
+                              AND taker_name = ?
+                              AND taker_login = ?
+                              AND maker_name <> 'Warehouse'
+                        GROUP BY
+                          order_id,
+                          taker_order_id,
+                          is_order_finalized,
+                          order_result,
+                          order_reject_reason
+                        ORDER BY order_id DESC;

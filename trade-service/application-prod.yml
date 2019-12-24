@@ -1,0 +1,42 @@
+server:
+  ssl:
+    key-store: classpath:ssl/keystore.jks
+    key-store-password: sqV^yEXfjj
+    keyStoreType: JKS
+    keyAlias: jfund
+spring:
+  security:
+    user:
+      name: trade_user
+      password: r0PF6y5SCr
+  flyway:
+      baseline-on-migrate: true
+  datasource:
+    url: jdbc:mysql://funddb.cyzmfrrw8ewt.eu-west-1.rds.amazonaws.com:3306/fund_trade?verifyServerCertificate=true&useSSL=true&requireSSL=true&trustCertificateKeyStoreUrl=classpath:ssl/amazon.jks&trustCertificateKeyStorePassword=3hBCGc4FFf3mAP
+    username: fund_trade_user
+    password: gKNR%Sztrv
+logging:
+  level:
+    com.xm: INFO
+zabbix:
+ projects:
+  project-host: tradeServiceProduction
+bridge:
+  datasource:
+      - url: jdbc:postgresql://bridge.ixi.com:5432/hub_active
+        username: FundUsr
+        driver-class-name: org.postgresql.Driver
+        password: EMEVskUWcuFPTRBfS43X
+      - url: jdbc:postgresql://5.79.32.96:5432/XMNew
+        username: jfund_usr
+        driver-class-name: org.postgresql.Driver
+        password: pVepTwHFfMl7lo2S6BSA
+fix:
+  session:
+    live-bridge:
+      primary: true
+      config-file: fix/OneZeroClientConfiguration-prod-live.cfg
+      session-status-interval: 30000
+    backup-bridge:
+      config-file: fix/OneZeroClientConfiguration-prod-backup.cfg
+      session-status-interval: 30000

@@ -1,0 +1,10 @@
+fix:
+  session:
+    demo-bridge:
+      assignment: static
+      config-file: fix/OneZeroClientConfiguration-aleksei.cfg
+      session-status-interval: 30000
+zabbix:
+ projects:
+  project-host: tradeServiceTestAleksei
+

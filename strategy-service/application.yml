@@ -1,0 +1,15 @@
+server:
+  port: 8081
+spring:
+  datasource:
+    url: ${db.url}/strategy
+    username: strategy_user
+    password: '{cipher}00e074f4537044e768e78086308ab5c661551af5f3207e744353f64652f0ff89'
+    driver-class-name: org.mariadb.jdbc.Driver
+analyst:
+  datasource:
+    url: ${db.url}/analyst_application
+    username: fund_user
+    password: '{cipher}53a8085f0b46be6dfd717b32113b34849fdb721339ab57991f5aab6ded650f35'
+    driver-class-name: org.mariadb.jdbc.Driver
+

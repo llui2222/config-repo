@@ -1,0 +1,33 @@
+db:
+  url: jdbc:mysql://localhost:3306
+management:
+  endpoints:
+    web:
+      exposure:
+        include: info, health, shutdown, prometheus
+  endpoint:
+    shutdown:
+      enabled: true
+spring:
+  jackson:
+      default-property-inclusion: non_null
+  jpa:
+    hibernate:
+      ddl-auto: validate
+hystrix:
+  command:
+    default:
+      execution:
+        timeout:
+          enabled: false
+ribbon:
+  ReadTimeout: 30000
+  ConnectTimeout: 5000
+logging:
+  path: /logs
+  level:
+    com.xm: DEBUG
+security:
+  jwt:
+    signature-key: '{cipher}403a80b59ddae22e5f8c8194868e3f662893a54db61c3bbdd60449cda5af0ddff1d72c55ba8239fe6d362f68c52acdc1'
+

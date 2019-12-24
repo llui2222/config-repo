@@ -1,0 +1,7 @@
+server:
+  port: 9000
+security:
+  jwt:
+    signature-algorithm: HS512
+    expiration: 1800
+

@@ -1,0 +1,12 @@
+server:
+  ssl:
+    key-store: classpath:ssl/keystore.jks
+    key-store-password: sqV^yEXfjj
+    keyStoreType: JKS
+    keyAlias: jfund
+
+fix:
+  session:
+    demo-bridge:
+      config-file: fix/OneZeroClientConfiguration.cfg
+      session-status-interval: 30000
